@@ -3,8 +3,7 @@ import GameElement from './GameElement';
 import PauseButton from '../UI/PauseButton';
 import '../../styles/game.css';
 
-// Тип для падающих элементов
-type GameElement = {
+type GameElementType = {
   id: number;
   x: number;
   speed: number;
@@ -12,25 +11,25 @@ type GameElement = {
 };
 
 const GameBoard: React.FC = () => {
-  // Состояния игры
   const [score, setScore] = useState(0);
-  const [elements, setElements] = useState<GameElement[]>([]);
+  const [elements, setElements] = useState<GameElementType[]>([]);
   const [isPaused, setIsPaused] = useState(false);
   const [isFrozen, setIsFrozen] = useState(false);
 
-  // Создание нового элемента
-  const createElement = useCallback((type: GameElement['type']): GameElement => {
+  // ЗАМЕДЛЕНИЕ: увеличиваем интервалы создания элементов
+  const createElement = useCallback((type: GameElementType['type']): GameElementType => {
     return {
-      id: Date.now() + Math.random(), // Уникальный ID
-      x: Math.random() * 90, // Случайная позиция (0-90%)
-      speed: Math.random() * 2 + 1, // Случайная скорость
-      type // Тип элемента
+      id: Date.now() + Math.random(),
+      x: Math.random() * 90,
+      speed: Math.random() * 2 + 2, // Увеличиваем минимальную скорость
+      type
     };
   }, []);
 
-  // Обработка клика по элементу
-  const handleElementClick = (id: number, type: GameElement['type']) => {
-    if (isPaused || isFrozen) return;
+  // Обработка клика по элементу (теперь работает при заморозке)
+  const handleElementClick = (id: number, type: GameElementType['type']) => {
+    // УБИРАЕМ ПРОВЕРКУ isFrozen - элементы кликабельны всегда!
+    if (isPaused) return;
 
     setElements(prev => prev.filter(el => el.id !== id));
 
@@ -48,22 +47,22 @@ const GameBoard: React.FC = () => {
     }
   };
 
-  // Генерация элементов
+  // ЗАМЕДЛЕНИЕ: увеличиваем интервалы генерации
   useEffect(() => {
     if (isPaused) return;
 
     const intervals = {
       heart: setInterval(() => {
         setElements(prev => [...prev, createElement('heart')]);
-      }, 800),
+      }, 1200), // Было 800 - стало 1200
 
       bomb: setInterval(() => {
         setElements(prev => [...prev, createElement('bomb')]);
-      }, 3000),
+      }, 5000), // Было 3000 - стало 5000
 
       freeze: setInterval(() => {
         setElements(prev => [...prev, createElement('freeze')]);
-      }, 10000)
+      }, 15000) // Было 10000 - стало 15000
     };
 
     return () => {
@@ -71,20 +70,27 @@ const GameBoard: React.FC = () => {
     };
   }, [isPaused, createElement]);
 
-  // Очистка ушедших за экран элементов
+  // АВТОМАТИЧЕСКОЕ УДАЛЕНИЕ ЭЛЕМЕНТОВ
   useEffect(() => {
     const cleanupInterval = setInterval(() => {
       setElements(prev => prev.filter(el => {
         const element = document.getElementById(`element-${el.id}`);
-        return element && element.getBoundingClientRect().top < window.innerHeight;
+        if (!element) return false;
+
+        const rect = element.getBoundingClientRect();
+        // Удаляем если элемент ниже видимой области
+        return rect.top < window.innerHeight + 100;
       }));
-    }, 1000);
+    }, 2000); // Проверяем каждые 2 секунды
 
     return () => clearInterval(cleanupInterval);
   }, []);
 
   return (
     <div className="game-container">
+      {/* СИНИЙ ЭКРАН ЗАМОРОЗКИ */}
+      {isFrozen && <div className="freeze-overlay"></div>}
+
       {/* Панель управления */}
       <div className="score">Score: {score}</div>
       <PauseButton

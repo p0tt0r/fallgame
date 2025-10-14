@@ -9,16 +9,16 @@ interface GameElementProps {
   onClick: () => void;
 }
 
-const GameElement: React.FC<GameElementProps> = ({ 
-  id, 
-  type, 
-  x, 
-  speed, 
-  isFrozen, 
-  onClick 
+const GameElement: React.FC<GameElementProps> = ({
+  id,
+  type,
+  x,
+  speed,
+  isFrozen,
+  onClick
 }) => {
   const getEmoji = () => {
-    switch(type) {
+    switch (type) {
       case 'heart': return '❤️';
       case 'bomb': return '💣';
       case 'freeze': return '❄️';
@@ -27,12 +27,11 @@ const GameElement: React.FC<GameElementProps> = ({
   };
 
   const getClassName = () => {
-    switch(type) {
-      case 'heart': return 'game-element heart';
-      case 'bomb': return 'game-element bomb';
-      case 'freeze': return 'game-element freeze';
-      default: return 'game-element heart';
-    }
+    const baseClass = 'game-element';
+    const typeClass = type;
+    const frozenClass = isFrozen ? 'frozen' : '';
+
+    return `${baseClass} ${typeClass} ${frozenClass}`;
   };
 
   return (
@@ -41,7 +40,7 @@ const GameElement: React.FC<GameElementProps> = ({
       className={getClassName()}
       style={{
         left: `${x}vw`,
-        animation: `fall ${speed}s linear forwards`,
+        animation: `fall-slow ${speed}s linear forwards`,
         animationPlayState: isFrozen ? 'paused' : 'running'
       }}
       onClick={onClick}
