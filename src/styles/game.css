@@ -205,3 +205,125 @@ game-element:active {
   transform: scale(0.8) !important;
   transition: transform 0.1s ease;
 }
+
+/* === ОБНОВЛЕННЫЕ СТИЛИ === */
+
+/* УВЕДОМЛЕНИЕ О ПАУЗЕ */
+.pause-notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  color: white;
+  font-size: 48px;
+  font-weight: bold;
+  padding: 30px 50px;
+  border-radius: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  text-align: center;
+  z-index: 200;
+  animation: pause-appear 0.5s ease-out;
+}
+
+.pause-hint {
+  font-size: 16px;
+  margin-top: 10px;
+  opacity: 0.8;
+  font-weight: normal;
+}
+
+@keyframes pause-appear {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* ЭФФЕКТ ИСЧЕЗНОВЕНИЯ ЭЛЕМЕНТОВ */
+.element-destroyed {
+  animation: element-destroy 0.3s ease-out forwards !important;
+}
+
+@keyframes element-destroy {
+  0% {
+    opacity: 1;
+    transform: translateY(var(--current-y)) scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: translateY(var(--current-y)) scale(1.2);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(var(--current-y)) scale(0.5);
+  }
+}
+
+/* СИНИЙ ЭКРАН ЗАМОРОЗКИ */
+.freeze-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg,
+      rgba(100, 200, 255, 0.3) 0%,
+      rgba(70, 130, 255, 0.5) 50%,
+      rgba(30, 80, 200, 0.4) 100%);
+  backdrop-filter: blur(5px);
+  z-index: 50;
+  pointer-events: none;
+  animation: freeze-pulse 2s ease-in-out;
+}
+
+@keyframes freeze-pulse {
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+
+  80% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ЭЛЕМЕНТЫ ПРИ ЗАМОРОЗКЕ */
+.game-element.frozen {
+  animation-play-state: paused !important;
+  filter:
+    drop-shadow(0px 0px 15px rgba(100, 200, 255, 0.8)) hue-rotate(180deg) brightness(1.2);
+  transform: scale(1.1);
+  transition: all 0.5s ease;
+}
+
+/* ЗАМЕДЛЕННАЯ АНИМАЦИЯ ПАДЕНИЯ */
+@keyframes fall-slow {
+  to {
+    transform: translateY(100vh);
+  }
+}
+
+.game-element {
+  animation: fall-slow linear forwards;
+  animation-play-state: running;
+}

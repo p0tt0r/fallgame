@@ -16,19 +16,16 @@ const GameBoard: React.FC = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [isFrozen, setIsFrozen] = useState(false);
 
-  // ЗАМЕДЛЕНИЕ: увеличиваем интервалы создания элементов
   const createElement = useCallback((type: GameElementType['type']): GameElementType => {
     return {
       id: Date.now() + Math.random(),
       x: Math.random() * 90,
-      speed: Math.random() * 2 + 2, // Увеличиваем минимальную скорость
+      speed: Math.random() * 2 + 2,
       type
     };
   }, []);
 
-  // Обработка клика по элементу (теперь работает при заморозке)
   const handleElementClick = (id: number, type: GameElementType['type']) => {
-    // УБИРАЕМ ПРОВЕРКУ isFrozen - элементы кликабельны всегда!
     if (isPaused) return;
 
     setElements(prev => prev.filter(el => el.id !== id));
@@ -47,22 +44,33 @@ const GameBoard: React.FC = () => {
     }
   };
 
-  // ЗАМЕДЛЕНИЕ: увеличиваем интервалы генерации
+  // ОЧИСТКА ЭКРАНА ПРИ ПАУЗЕ
+  const handlePauseClick = () => {
+    const newPausedState = !isPaused;
+    setIsPaused(newPausedState);
+
+    // Если включаем паузу - очищаем экран
+    if (newPausedState) {
+      setElements([]);
+    }
+  };
+
+  // Генерация элементов
   useEffect(() => {
     if (isPaused) return;
 
     const intervals = {
       heart: setInterval(() => {
         setElements(prev => [...prev, createElement('heart')]);
-      }, 1200), // Было 800 - стало 1200
+      }, 1200),
 
       bomb: setInterval(() => {
         setElements(prev => [...prev, createElement('bomb')]);
-      }, 5000), // Было 3000 - стало 5000
+      }, 5000),
 
       freeze: setInterval(() => {
         setElements(prev => [...prev, createElement('freeze')]);
-      }, 15000) // Было 10000 - стало 15000
+      }, 15000)
     };
 
     return () => {
@@ -70,7 +78,31 @@ const GameBoard: React.FC = () => {
     };
   }, [isPaused, createElement]);
 
-  // АВТОМАТИЧЕСКОЕ УДАЛЕНИЕ ЭЛЕМЕНТОВ
+  // АВТОМАТИЧЕСКОЕ УДАЛЕНИЕ ПРИ ДОСТИЖЕНИИ НИЖНЕЙ ГРАНИЦЫ
+  useEffect(() => {
+    const checkElementsPosition = () => {
+      setElements(prev => prev.filter(el => {
+        const element = document.getElementById(`element-${el.id}`);
+        if (!element) return false;
+
+        const rect = element.getBoundingClientRect();
+        // Удаляем если элемент достиг нижней границы экрана
+        return rect.top < window.innerHeight;
+      }));
+    };
+
+    const positionCheckInterval = setInterval(checkElementsPosition, 100); // Проверяем чаще
+
+    // Также проверяем позицию при скролле/изменении размера
+    window.addEventListener('resize', checkElementsPosition);
+
+    return () => {
+      clearInterval(positionCheckInterval);
+      window.removeEventListener('resize', checkElementsPosition);
+    };
+  }, []);
+
+  // УДАЛЕНИЕ ЭЛЕМЕНТОВ ПРИ ВЫХОДЕ ЗА ПРЕДЕЛЫ ЭКРАНА (страховка)
   useEffect(() => {
     const cleanupInterval = setInterval(() => {
       setElements(prev => prev.filter(el => {
@@ -78,10 +110,10 @@ const GameBoard: React.FC = () => {
         if (!element) return false;
 
         const rect = element.getBoundingClientRect();
-        // Удаляем если элемент ниже видимой области
+        // Удаляем если элемент полностью ушел за нижнюю границу
         return rect.top < window.innerHeight + 100;
       }));
-    }, 2000); // Проверяем каждые 2 секунды
+    }, 1000);
 
     return () => clearInterval(cleanupInterval);
   }, []);
@@ -95,8 +127,16 @@ const GameBoard: React.FC = () => {
       <div className="score">Score: {score}</div>
       <PauseButton
         isPaused={isPaused}
-        onClick={() => setIsPaused(!isPaused)}
+        onClick={handlePauseClick}
       />
+
+      {/* Сообщение о паузе */}
+      {isPaused && (
+        <div className="pause-notification">
+          ⏸️ PAUSED
+          <div className="pause-hint">Click play to continue</div>
+        </div>
+      )}
 
       {/* Рендер элементов */}
       {elements.map(el => (

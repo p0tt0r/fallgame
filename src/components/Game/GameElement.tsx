@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface GameElementProps {
   id: number;
@@ -17,6 +17,34 @@ const GameElement: React.FC<GameElementProps> = ({
   isFrozen,
   onClick
 }) => {
+  const [isDestroyed, setIsDestroyed] = useState(false);
+
+  // Проверяем позицию элемента
+  useEffect(() => {
+    const checkPosition = () => {
+      const element = document.getElementById(`element-${id}`);
+      if (!element) return;
+
+      const rect = element.getBoundingClientRect();
+
+      // Если элемент достиг нижней границы
+      if (rect.top >= window.innerHeight && !isDestroyed) {
+        setIsDestroyed(true);
+
+        // Запускаем анимацию уничтожения
+        setTimeout(() => {
+          const elementToRemove = document.getElementById(`element-${id}`);
+          if (elementToRemove) {
+            elementToRemove.remove();
+          }
+        }, 300); // Время анимации
+      }
+    };
+
+    const interval = setInterval(checkPosition, 100);
+    return () => clearInterval(interval);
+  }, [id, isDestroyed]);
+
   const getEmoji = () => {
     switch (type) {
       case 'heart': return '❤️';
@@ -30,8 +58,9 @@ const GameElement: React.FC<GameElementProps> = ({
     const baseClass = 'game-element';
     const typeClass = type;
     const frozenClass = isFrozen ? 'frozen' : '';
+    const destroyedClass = isDestroyed ? 'element-destroyed' : '';
 
-    return `${baseClass} ${typeClass} ${frozenClass}`;
+    return `${baseClass} ${typeClass} ${frozenClass} ${destroyedClass}`;
   };
 
   return (
