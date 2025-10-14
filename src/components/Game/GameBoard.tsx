@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import GameElement from './GameElement';
 import PauseButton from '../UI/PauseButton';
+import SimpleAuth from '../Auth/SimpleAuth';
+import { storageService, User } from '../../services/localStorageService';
 import '../../styles/game.css';
 
 type GameElementType = {
@@ -16,6 +18,19 @@ const GameBoard: React.FC = () => {
   const [elements, setElements] = useState<GameElementType[]>([]);
   const [isPaused, setIsPaused] = useState(false);
   const [isFrozen, setIsFrozen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [showAuth, setShowAuth] = useState(true);
+  const [highScore, setHighScore] = useState(0);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+
+  useEffect(() => {
+    const savedUser = storageService.getUser();
+    if (savedUser) {
+      setUser(savedUser);
+      setHighScore(savedUser.highScore);
+      setShowAuth(false);
+    }
+  }, []);
 
   const createElement = useCallback((type: GameElementType['type']): GameElementType => {
     return {
@@ -32,19 +47,39 @@ const GameBoard: React.FC = () => {
 
     setElements(prev => prev.filter(el => el.id !== id));
 
+    let newScore = score;
+
     switch (type) {
       case 'heart':
-        setScore(s => s + 1);
+        newScore = score + 1;
         break;
       case 'bomb':
-        setScore(s => Math.max(0, s - 10));
+        newScore = Math.max(0, score - 10);
         break;
       case 'freeze':
         setIsFrozen(true);
         setTimeout(() => setIsFrozen(false), 2000);
         break;
     }
+
+    setScore(newScore);
+
+    if (newScore > highScore && user) {
+      const updatedUser = storageService.updateUserScore(newScore);
+      if (updatedUser) {
+        setHighScore(newScore);
+        setUser(updatedUser);
+
+
+        storageService.updateLeaderboard(newScore);
+      }
+    }
+
   };
+
+
+
+
 
   const handlePauseClick = () => {
     const newPausedState = !isPaused;
@@ -55,8 +90,31 @@ const GameBoard: React.FC = () => {
     }
   };
 
+  const handleAuthSuccess = (userData: User) => {
+    setUser(userData);
+    setHighScore(userData.highScore);
+    setShowAuth(false);
+  };
+
+  const handleLogout = () => {
+    storageService.clearAllData();
+    setUser(null);
+    setScore(0);
+    setHighScore(0);
+    setShowAuth(true);
+    setElements([]);
+  };
+
+  const handleNewGame = () => {
+    setScore(0);
+    setElements([]);
+    setIsPaused(false);
+  };
+
+
+
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || showAuth) return;
 
     const intervals = {
       heart: setInterval(() => {
@@ -75,33 +133,68 @@ const GameBoard: React.FC = () => {
     return () => {
       Object.values(intervals).forEach(clearInterval);
     };
-  }, [isPaused, createElement]);
+  }, [isPaused, createElement, showAuth]);
 
+
+  // удаление элементов
   useEffect(() => {
     const cleanupInterval = setInterval(() => {
       const now = Date.now();
-      setElements(prev => prev.filter(el => {
-        return now - el.createdAt < 10000;
-      }));
-    }, 1000);
+      setElements(prev => prev.filter(el => now - el.createdAt < 15000));
+    }, 2000);
 
     return () => clearInterval(cleanupInterval);
   }, []);
+
+  if (showAuth) {
+    return <SimpleAuth onAuthSuccess={handleAuthSuccess} />;
+  }
+
 
   return (
     <div className="game-container">
       {isFrozen && <div className="freeze-overlay"></div>}
 
-      <div className="score">Score: {score}</div>
-      <PauseButton
-        isPaused={isPaused}
-        onClick={handlePauseClick}
-      />
+      {/* Верхняя панель */}
+      <div className="game-header">
+        <div className="user-panel">
+          <div className="user-info">
+            <span className="username">👤 {user?.username}</span>
+            <div className="user-stats">
+              <span>🏆 {highScore}</span>
+              <span>🎮 {user?.gamesPlayed || 0}</span>
+            </div>
+          </div>
+          <div className="user-actions">
+            <button onClick={handleNewGame} className="icon-btn" title="Новая игра">
+              🔄
+            </button>
+            <button onClick={() => setShowLeaderboard(true)} className="icon-btn" title="Таблица лидеров">
+              📊
+            </button>
+            <button onClick={handleLogout} className="icon-btn" title="Выйти">
+              🚪
+            </button>
+          </div>
+        </div>
+
+        <div className="score-panel">
+          <div className="current-score">Score: {score}</div>
+          {score > highScore && <div className="new-record">🔥 Новый рекорд!</div>}
+        </div>
+      </div>
+
+      <PauseButton isPaused={isPaused} onClick={handlePauseClick} />
+
+      {/* Таблица лидеров */}
+      {showLeaderboard && (
+        <LeaderboardModal onClose={() => setShowLeaderboard(false)} />
+      )}
 
       {isPaused && (
         <div className="pause-notification">
           ⏸️ PAUSED
-          <div className="pause-hint">Click play to continue</div>
+          <div className="pause-hint">Нажмите play чтобы продолжить</div>
         </div>
       )}
 
@@ -116,6 +209,39 @@ const GameBoard: React.FC = () => {
           isFrozen={isFrozen}
         />
       ))}
+    </div>
+  );
+};
+
+// Компонент таблицы лидеров
+const LeaderboardModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const leaderboard = storageService.getLeaderboard();
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={e => e.stopPropagation()}>
+        <div className="modal-header">
+          <h2>🏆 Таблица лидеров</h2>
+          <button onClick={onClose} className="close-btn">✕</button>
+        </div>
+
+        <div className="leaderboard-list">
+          {leaderboard.length === 0 ? (
+            <div className="no-scores">Пока нет результатов</div>
+          ) : (
+            leaderboard.map((entry, index) => (
+              <div key={entry.userId + entry.date} className="leaderboard-item">
+                <div className="rank">#{index + 1}</div>
+                <div className="player-info">
+                  <span className="player-name">{entry.username}</span>
+                  <span className="score-date">{entry.date}</span>
+                </div>
+                <div className="player-score">{entry.score} pts</div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
     </div>
   );
 };
