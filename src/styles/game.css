@@ -128,31 +128,49 @@
   }
 }
 
-.score {
-  position: fixed;
-  top: 40px;
-  right: 20px;
-  min-width: 150px;
-  height: 60px;
-  padding: 0 25px;
-  background: rgba(255, 255, 255, 0.10);
-  backdrop-filter: blur(10px);
-  border-radius: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.20);
-  box-shadow: 0px 8px 32px 0px rgba(0, 0, 0, 0.30);
-  color: #FFFFFF;
-  font-size: 24px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
+/* УДАЛЯЕМ старые стили для .score и .pause-btn - они теперь в header */
+/* .score { ... } */
+/* .pause-btn { ... } */
+
+.game-container {
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
 }
 
-.pause-btn {
+/* ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ ИНТЕРФЕЙСА */
+.game-header {
   position: fixed;
-  top: 40px;
-  left: 20px;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  background: linear-gradient(180deg, rgba(26, 26, 46, 0.9) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Разрешаем клики только по интерактивным элементам */
+.game-header>* {
+  pointer-events: auto;
+}
+
+/* Левая часть - пауза и пользователь */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+}
+
+/* Стили для кнопки паузы внутри header */
+.pause-btn {
   width: 60px;
   height: 60px;
   background: rgba(255, 255, 255, 0.10);
@@ -164,73 +182,88 @@
   font-size: 24px;
   cursor: pointer;
   transition: all 0.3s ease;
-  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
-.game-container {
-  width: 100%;
-  height: 100vh;
-  background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
-  position: relative;
-  overflow: hidden;
-  font-family: 'Inter', sans-serif;
+.pause-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.05);
 }
 
-/*Reg style, leaderboard style */
-/* Стили для нового интерфейса */
-.game-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 15px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  z-index: 100;
-  background: linear-gradient(180deg, rgba(26, 26, 46, 0.9) 0%, transparent 100%);
-}
-
-.user-panel {
+.user-section {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+  gap: 5px;
 }
 
 .username {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  padding: 8px 15px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.user-stats {
-  display: flex;
-  gap: 10px;
-}
-
-.user-stats span {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   padding: 6px 12px;
   border-radius: 15px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
-  font-size: 12px;
   font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.user-stats {
+  display: flex;
+  gap: 8px;
+}
+
+.user-stats span {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Центральная часть - счет */
+.header-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.current-score {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FF6B8B;
+  font-weight: bold;
+  font-size: 18px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+}
+
+.new-record {
+  background: linear-gradient(45deg, #FF6B8B, #FFE66D);
+  color: #1A1A2E;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: bold;
+  margin-top: 5px;
+  animation: pulse 1.5s infinite;
+}
+
+/* Правая часть - действия */
+.header-right {
+  display: flex;
+  justify-content: flex-end;
+  flex: 1;
 }
 
 .user-actions {
@@ -258,35 +291,7 @@
   transform: scale(1.1);
 }
 
-.score-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 5px;
-}
-
-.current-score {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  padding: 10px 20px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #FF6B8B;
-  font-weight: bold;
-  font-size: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-.new-record {
-  background: linear-gradient(45deg, #FF6B8B, #FFE66D);
-  color: #1A1A2E;
-  padding: 5px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: bold;
-  animation: pulse 1.5s infinite;
-}
-
+/* Анимация пульсации для нового рекорда */
 @keyframes pulse {
 
   0%,
@@ -296,6 +301,86 @@
 
   50% {
     opacity: 0.7;
+  }
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .game-header {
+    padding: 10px 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .header-left {
+    order: 1;
+    flex: 1 1 100%;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .header-center {
+    order: 2;
+    flex: 1;
+  }
+
+  .header-right {
+    order: 3;
+    flex: 1;
+    justify-content: flex-end;
+  }
+
+  .pause-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+
+  .current-score {
+    font-size: 16px;
+    padding: 8px 16px;
+  }
+
+  .username {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
+  .user-stats span {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-header {
+    padding: 8px 10px;
+  }
+
+  .header-left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .user-stats {
+    gap: 5px;
+  }
+
+  .current-score {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .new-record {
+    font-size: 10px;
+    padding: 3px 8px;
   }
 }
 

@@ -69,17 +69,10 @@ const GameBoard: React.FC = () => {
       if (updatedUser) {
         setHighScore(newScore);
         setUser(updatedUser);
-
-
         storageService.updateLeaderboard(newScore);
       }
     }
-
   };
-
-
-
-
 
   const handlePauseClick = () => {
     const newPausedState = !isPaused;
@@ -97,7 +90,9 @@ const GameBoard: React.FC = () => {
   };
 
   const handleLogout = () => {
-    storageService.clearAllData();
+    storageService.clearUserData();
+    // для тестирования
+    //storageService.clearAllData();
     setUser(null);
     setScore(0);
     setHighScore(0);
@@ -110,8 +105,6 @@ const GameBoard: React.FC = () => {
     setElements([]);
     setIsPaused(false);
   };
-
-
 
   useEffect(() => {
     if (isPaused || showAuth) return;
@@ -135,7 +128,6 @@ const GameBoard: React.FC = () => {
     };
   }, [isPaused, createElement, showAuth]);
 
-
   // удаление элементов
   useEffect(() => {
     const cleanupInterval = setInterval(() => {
@@ -150,21 +142,32 @@ const GameBoard: React.FC = () => {
     return <SimpleAuth onAuthSuccess={handleAuthSuccess} />;
   }
 
-
   return (
     <div className="game-container">
       {isFrozen && <div className="freeze-overlay"></div>}
 
-      {/* Верхняя панель */}
+      {/* Верхняя панель - перераспределяем элементы */}
       <div className="game-header">
-        <div className="user-panel">
-          <div className="user-info">
+        {/* Левая часть - кнопка паузы и пользователь */}
+        <div className="header-left">
+          <PauseButton isPaused={isPaused} onClick={handlePauseClick} />
+          <div className="user-section">
             <span className="username">👤 {user?.username}</span>
             <div className="user-stats">
               <span>🏆 {highScore}</span>
               <span>🎮 {user?.gamesPlayed || 0}</span>
             </div>
           </div>
+        </div>
+
+        {/* Центр - текущий счет */}
+        <div className="header-center">
+          <div className="current-score">Score: {score}</div>
+          {score > highScore && <div className="new-record">🔥 Новый рекорд!</div>}
+        </div>
+
+        {/* Правая часть - действия пользователя */}
+        <div className="header-right">
           <div className="user-actions">
             <button onClick={handleNewGame} className="icon-btn" title="Новая игра">
               🔄
@@ -177,14 +180,7 @@ const GameBoard: React.FC = () => {
             </button>
           </div>
         </div>
-
-        <div className="score-panel">
-          <div className="current-score">Score: {score}</div>
-          {score > highScore && <div className="new-record">🔥 Новый рекорд!</div>}
-        </div>
       </div>
-
-      <PauseButton isPaused={isPaused} onClick={handlePauseClick} />
 
       {/* Таблица лидеров */}
       {showLeaderboard && (
@@ -213,7 +209,7 @@ const GameBoard: React.FC = () => {
   );
 };
 
-// Компонент таблицы лидеров
+// Компонент таблицы лидеров (остается без изменений)
 const LeaderboardModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const leaderboard = storageService.getLeaderboard();
 

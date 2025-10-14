@@ -129,10 +129,15 @@ class LocalStorageService {
     }
 
     // Очистка всех данных (для тестирования)
-    clearAllData() {
+    // clearAllData() {
+    //     localStorage.removeItem(this.USER_KEY);
+    //     localStorage.removeItem(this.LEADERBOARD_KEY);
+    //     localStorage.removeItem(this.SETTINGS_KEY);
+    // }
+    clearUserData() {
         localStorage.removeItem(this.USER_KEY);
-        localStorage.removeItem(this.LEADERBOARD_KEY);
         localStorage.removeItem(this.SETTINGS_KEY);
+
     }
 
     // Экспорт данных
