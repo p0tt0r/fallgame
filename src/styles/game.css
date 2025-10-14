@@ -1,56 +1,18 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Arial', sans-serif;
-  overflow: hidden;
-  background: #ffebee;
-}
-
 .game-container {
   position: relative;
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
+  background: #ffebee;
 }
 
-.game-element {
+.heart {
   position: absolute;
-  font-size: 35px;
+  font-size: 30px;
   cursor: pointer;
   user-select: none;
-  animation: fall linear;
-  top: -60px;
-  transition: transform 0.2s;
-  z-index: 1;
-}
-
-.game-element:hover {
-  transform: scale(1.2);
-}
-
-.game-element:active {
-  transform: scale(0.9);
-}
-
-/* Цвета для разных типов элементов */
-.heart { 
-  color: #ff0000; 
-  filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.5));
-}
-
-.bomb { 
-  color: #000000; 
-  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
-}
-
-.freeze { 
-  color: #00a8ff; 
-  filter: drop-shadow(0 0 5px rgba(0, 168, 255, 0.5));
+  top: -50px;
+  will-change: transform;
 }
 
 @keyframes fall {
@@ -65,12 +27,49 @@ body {
   right: 20px;
   font-size: 24px;
   color: #d32f2f;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 10px 20px;
-  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 5px 15px;
+  border-radius: 20px;
   z-index: 100;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  font-weight: bold;
+}
+.game-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #ffebee;
+}
+
+.element {
+  position: absolute;
+  font-size: 30px;
+  cursor: pointer;
+  user-select: none;
+  top: -50px;
+  will-change: transform;
+}
+
+/* Цвета элементов */
+.heart { color: #ff0000; }
+.bomb { color: #000; }
+.freeze { color: #00a8ff; }
+
+/* Анимация падения */
+@keyframes fall {
+  to { transform: translateY(100vh); }
+}
+
+/* UI элементы */
+.score {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  font-size: 24px;
+  color: #d32f2f;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 5px 15px;
+  border-radius: 20px;
+  z-index: 100;
 }
 
 .pause-btn {
@@ -78,29 +77,11 @@ body {
   top: 20px;
   left: 20px;
   font-size: 24px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.7);
   border: none;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
   z-index: 100;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
-}
-
-.pause-btn:hover {
-  transform: scale(1.1);
-}
-
-/* Эффект заморозки */
-.frozen-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(173, 216, 230, 0.3);
-  z-index: 50;
-  pointer-events: none;
 }
