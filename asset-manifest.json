@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/fallgame/static/css/main.c42d12ca.css",
+    "main.js": "/fallgame/static/js/main.1b2ec31d.js",
+    "index.html": "/fallgame/index.html",
+    "main.c42d12ca.css.map": "/fallgame/static/css/main.c42d12ca.css.map",
+    "main.1b2ec31d.js.map": "/fallgame/static/js/main.1b2ec31d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c42d12ca.css",
+    "static/js/main.1b2ec31d.js"
+  ]
+}
