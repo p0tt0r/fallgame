@@ -21,8 +21,7 @@
     }
 
     100% {
-        transform:
-            translate(calc(var(--tx) * 100px),
+        transform: translate(calc(var(--tx) * 100px),
                 calc(var(--ty) * 100px)) scale(0);
         opacity: 0;
     }

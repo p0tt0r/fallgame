@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './ParticleSystem.css';
 
 interface Particle {
     id: number;
