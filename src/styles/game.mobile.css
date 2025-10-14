@@ -1,3 +1,4 @@
+/* game.mobile.css */
 /* Мобильная версия */
 @media (max-width: 768px) {
     .game-header {
@@ -61,6 +62,57 @@
         font-size: 9px;
         padding: 2px 6px;
     }
+
+    /* Уменьшаем игровые элементы */
+    .game-element {
+        width: 50px;
+        height: 50px;
+        font-size: 30px;
+        min-width: 50px;
+        min-height: 50px;
+    }
+
+    /* Уменьшаем уведомление о паузе */
+    .pause-notification {
+        font-size: 32px;
+        padding: 20px 30px;
+    }
+
+    .pause-hint {
+        font-size: 12px;
+    }
+
+    /* Уменьшаем модальное окно */
+    .modal-content {
+        width: 95%;
+        margin: 10px;
+    }
+
+    .modal-header {
+        padding: 15px 20px;
+    }
+
+    .modal-header h2 {
+        font-size: 1.2em;
+    }
+
+    .leaderboard-item {
+        padding: 10px;
+        margin-bottom: 8px;
+    }
+
+    .rank {
+        font-size: 1em;
+        min-width: 40px;
+    }
+
+    .player-name {
+        font-size: 0.9em;
+    }
+
+    .player-score {
+        font-size: 1em;
+    }
 }
 
 /* Очень маленькие экраны */
@@ -91,10 +143,83 @@
         padding: 4px 8px;
     }
 
+    /* Еще больше уменьшаем элементы на очень маленьких экранах */
     .game-element {
-        width: 50px;
-        height: 50px;
-        font-size: 30px;
-        min-width: 50px;
+        width: 45px;
+        height: 45px;
+        font-size: 25px;
+        min-width: 45px;
+        min-height: 45px;
+    }
+
+    .pause-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    .icon-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 10px;
+    }
+
+    .username {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+
+    /* Уменьшаем информационное сообщение */
+    .local-info {
+        font-size: 10px;
+        padding: 6px 12px;
+        bottom: 10px;
+    }
+}
+
+/* Горизонтальная ориентация на мобильных */
+@media (max-width: 768px) and (orientation: landscape) {
+    .game-header {
+        padding: 5px 8px;
+    }
+
+    .game-element {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        min-width: 40px;
+        min-height: 40px;
+    }
+
+    .current-score {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    /* Уменьшаем высоту контейнера для landscape */
+    .game-container {
+        height: 100vh;
+        min-height: 400px;
+    }
+}
+
+/* Улучшаем touch-опыт на мобильных */
+@media (max-width: 768px) {
+    .game-element {
+        /* Увеличиваем область касания */
+        margin: 2px;
+    }
+
+    .pause-btn,
+    .icon-btn {
+        /* Увеличиваем область касания для кнопок */
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    /* Улучшаем отзывчивость */
+    .game-element:active {
+        transform: scale(0.95);
+        transition: transform 0.1s;
     }
 }
