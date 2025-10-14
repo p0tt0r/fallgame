@@ -84,9 +84,7 @@ const GameBoard: React.FC = () => {
     const cleanupInterval = setInterval(() => {
       const now = Date.now();
       setElements(prev => prev.filter(el => {
-        // Удаляем элементы, которые существуют дольше 8 секунд
-        // (максимальное время падения + запас)
-        return now - el.createdAt < 8000;
+        return now - el.createdAt < 10000;
       }));
     }, 1000);
 
