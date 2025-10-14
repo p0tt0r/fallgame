@@ -1,0 +1,29 @@
+.particles-container {
+    position: fixed;
+    /* или absolute в зависимости от контекста */
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    animation: particle-fly 0.8s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes particle-fly {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform:
+            translate(calc(var(--tx) * 100px),
+                calc(var(--ty) * 100px)) scale(0);
+        opacity: 0;
+    }
+}

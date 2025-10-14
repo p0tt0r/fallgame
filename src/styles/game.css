@@ -128,10 +128,6 @@
   }
 }
 
-/* УДАЛЯЕМ старые стили для .score и .pause-btn - они теперь в header */
-/* .score { ... } */
-/* .pause-btn { ... } */
-
 .game-container {
   width: 100%;
   height: 100vh;
@@ -141,7 +137,6 @@
   font-family: 'Inter', sans-serif;
 }
 
-/* ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ ИНТЕРФЕЙСА */
 .game-header {
   position: fixed;
   top: 0;
@@ -227,7 +222,7 @@
   font-weight: 600;
 }
 
-/* Центральная часть - счет */
+/* Центральная часть */
 .header-center {
   display: flex;
   flex-direction: column;
@@ -259,7 +254,7 @@
   animation: pulse 1.5s infinite;
 }
 
-/* Правая часть - действия */
+/* Правая часть */
 .header-right {
   display: flex;
   justify-content: flex-end;
@@ -304,7 +299,7 @@
   }
 }
 
-/* Адаптивность для мобильных устройств */
+/* Для мобильных устройств */
 @media (max-width: 768px) {
   .game-header {
     padding: 10px 15px;
@@ -384,7 +379,7 @@
   }
 }
 
-/* Модальное окно таблицы лидеров */
+/* Таблицы лидеров */
 .modal-overlay {
   position: fixed;
   top: 0;

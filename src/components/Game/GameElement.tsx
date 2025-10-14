@@ -1,4 +1,6 @@
 import React from 'react';
+import ParticleSystem from '../Effectc/ParticleSystem';
+
 
 interface GameElementProps {
   id: number;

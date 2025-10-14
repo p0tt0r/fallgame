@@ -45,8 +45,6 @@ const GameBoard: React.FC = () => {
   const handleElementClick = (id: number, type: GameElementType['type']) => {
     if (isPaused) return;
 
-    setElements(prev => prev.filter(el => el.id !== id));
-
     let newScore = score;
 
     switch (type) {
@@ -209,7 +207,6 @@ const GameBoard: React.FC = () => {
   );
 };
 
-// Компонент таблицы лидеров (остается без изменений)
 const LeaderboardModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const leaderboard = storageService.getLeaderboard();
 
