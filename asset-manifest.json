@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/fallgame/static/css/main.867a82d8.css",
+    "main.css": "/fallgame/static/css/main.f06cfb71.css",
     "main.js": "/fallgame/static/js/main.bf835f3f.js",
     "index.html": "/fallgame/index.html",
-    "main.867a82d8.css.map": "/fallgame/static/css/main.867a82d8.css.map",
+    "main.f06cfb71.css.map": "/fallgame/static/css/main.f06cfb71.css.map",
     "main.bf835f3f.js.map": "/fallgame/static/js/main.bf835f3f.js.map"
   },
   "entrypoints": [
-    "static/css/main.867a82d8.css",
+    "static/css/main.f06cfb71.css",
     "static/js/main.bf835f3f.js"
   ]
 }
