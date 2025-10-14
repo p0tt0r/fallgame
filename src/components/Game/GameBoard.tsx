@@ -8,7 +8,7 @@ type GameElementType = {
   x: number;
   speed: number;
   type: 'heart' | 'bomb' | 'freeze';
-  createdAt: number; // Добавляем время создания
+  createdAt: number;
 };
 
 const GameBoard: React.FC = () => {
@@ -23,7 +23,7 @@ const GameBoard: React.FC = () => {
       x: Math.random() * 90,
       speed: Math.random() * 2 + 2,
       type,
-      createdAt: Date.now() // Запоминаем время создания
+      createdAt: Date.now()
     };
   }, []);
 
@@ -46,7 +46,6 @@ const GameBoard: React.FC = () => {
     }
   };
 
-  // ОЧИСТКА ЭКРАНА ПРИ ПАУЗЕ
   const handlePauseClick = () => {
     const newPausedState = !isPaused;
     setIsPaused(newPausedState);
@@ -56,7 +55,6 @@ const GameBoard: React.FC = () => {
     }
   };
 
-  // Генерация элементов
   useEffect(() => {
     if (isPaused) return;
 
@@ -79,7 +77,6 @@ const GameBoard: React.FC = () => {
     };
   }, [isPaused, createElement]);
 
-  // ПРОСТАЯ И НАДЕЖНАЯ ЛОГИКА УДАЛЕНИЯ ПО ВРЕМЕНИ
   useEffect(() => {
     const cleanupInterval = setInterval(() => {
       const now = Date.now();
