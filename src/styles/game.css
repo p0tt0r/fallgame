@@ -151,6 +151,98 @@
   pointer-events: none;
 }
 
+/* Анимации взрыва и сбора элементов */
+@keyframes bomb-explode {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    filter: brightness(1) drop-shadow(0px 0px 15px rgba(255, 0, 0, 0.40));
+  }
+
+  50% {
+    transform: scale(1.8);
+    opacity: 0.8;
+    filter: brightness(1.5) drop-shadow(0px 0px 30px rgba(255, 0, 0, 0.8));
+  }
+
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+    filter: brightness(2) drop-shadow(0px 0px 50px rgba(255, 100, 100, 0.6));
+  }
+}
+
+@keyframes heart-pop {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    filter: brightness(1) drop-shadow(0px 0px 20px rgba(255, 107, 139, 0.60));
+  }
+
+  30% {
+    transform: scale(1.4);
+    opacity: 0.9;
+    filter: brightness(1.3) drop-shadow(0px 0px 30px rgba(255, 107, 139, 0.8));
+  }
+
+  70% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: scale(1.8) rotate(45deg);
+    opacity: 0;
+    filter: brightness(1.6) drop-shadow(0px 0px 40px rgba(255, 150, 180, 0.4));
+  }
+}
+
+@keyframes freeze-shatter {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: brightness(1) drop-shadow(0px 0px 20px rgba(78, 205, 196, 0.60));
+  }
+
+  40% {
+    transform: scale(1.5) rotate(180deg);
+    opacity: 0.8;
+    filter: brightness(1.4) drop-shadow(0px 0px 35px rgba(78, 205, 196, 0.8));
+  }
+
+  80% {
+    transform: scale(1.3) rotate(270deg);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: scale(2) rotate(360deg);
+    opacity: 0;
+    filter: brightness(1.8) drop-shadow(0px 0px 50px rgba(100, 255, 255, 0.3));
+  }
+}
+
+/* Классы для анимаций при клике */
+.game-element.exploding {
+  animation: bomb-explode 0.6s ease-out forwards !important;
+  background: radial-gradient(circle, #ff4444 0%, #ff0000 50%, #990000 100%) !important;
+}
+
+.game-element.collected.heart {
+  animation: heart-pop 0.5s ease-out forwards !important;
+}
+
+.game-element.collected.freeze {
+  animation: freeze-shatter 0.5s ease-out forwards !important;
+}
+
+/* Убедимся, что анимации имеют приоритет */
+.game-element.exploding,
+.game-element.collected {
+  animation-fill-mode: forwards !important;
+  animation-play-state: running !important;
+}
+
 /* Разрешаем клики только по интерактивным элементам */
 .game-header>* {
   pointer-events: auto;

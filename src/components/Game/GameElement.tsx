@@ -18,7 +18,7 @@ const GameElement: React.FC<GameElementProps> = ({
   const [elementPosition, setElementPosition] = useState({ x: 0, y: 0 });
 
   const handleClick = () => {
-    if (isFrozen) return;
+    if (isFrozen || isExploding) return;
 
     // Получаем позицию элемента для частиц
     const element = document.getElementById(`element-${id}`);
@@ -56,7 +56,10 @@ const GameElement: React.FC<GameElementProps> = ({
   const getElementClass = () => {
     let className = `game-element ${type}`;
     if (isFrozen) className += ' frozen';
-    if (isExploding) className += type === 'bomb' ? ' exploding' : ' collected';
+    if (isExploding) {
+      // Для бомбы - exploding, для остальных - collected
+      className += type === 'bomb' ? ' exploding' : ' collected';
+    }
     return className;
   };
 
