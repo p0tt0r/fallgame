@@ -1,31 +1,21 @@
-.game-container {
-  width: 100%;
-  height: 100vh;
-  background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
-  position: relative;
-  overflow: hidden;
-  font-family: 'Inter', sans-serif;
-}
+/* === ИСПРАВЛЕННЫЕ СТИЛИ === */
 
-.score {
-  position: fixed;
-  top: 40px;
-  right: 20px;
-  min-width: 150px;
-  height: 60px;
-  padding: 0 25px;
-  background: rgba(255, 255, 255, 0.10);
-  backdrop-filter: blur(10px);
-  border-radius: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.20);
-  box-shadow: 0px 8px 32px 0px rgba(0, 0, 0, 0.30);
-  color: #FFFFFF;
-  font-size: 24px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
+/* ОСНОВНАЯ АНИМАЦИЯ ПАДЕНИЯ - ФИКС */
+@keyframes fall {
+  0% {
+    transform: translateY(-100px);
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+    /* Исчезают в конце */
+  }
 }
 
 .game-element {
@@ -34,17 +24,20 @@
   height: 60px;
   cursor: pointer;
   user-select: none;
-  animation: fall linear;
+  animation: fall linear forwards;
   top: -60px;
-  transition: all 0.3s ease;
+  /* Начинают выше экрана */
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 40px;
   border-radius: 50%;
   z-index: 1;
+  animation-fill-mode: forwards;
+  /* Остаются в конечном состоянии */
 }
 
+/* Стили для разных типов элементов */
 .heart {
   background: #FF6B8B;
   filter: drop-shadow(0px 0px 20px rgba(255, 107, 139, 0.60));
@@ -58,155 +51,14 @@
 .freeze {
   background: #4ECDC4;
   filter: drop-shadow(0px 0px 20px rgba(78, 205, 196, 0.60));
-  animation: fall linear, sparkle 2s infinite;
 }
 
-.pause-btn {
-  position: fixed;
-  top: 40px;
-  left: 20px;
-  width: 60px;
-  height: 60px;
-  background: rgba(255, 255, 255, 0.10);
-  backdrop-filter: blur(10px);
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.20);
-  box-shadow: 0px 8px 32px 0px rgba(0, 0, 0, 0.30);
-  color: #FFFFFF;
-  font-size: 24px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-@keyframes fall {
-  to {
-    transform: translateY(100vh);
-  }
-}
-
-@keyframes sparkle {
-
-  0%,
-  100% {
-    filter: drop-shadow(0px 0px 20px rgba(78, 205, 196, 0.60));
-  }
-
-  50% {
-    filter: drop-shadow(0px 0px 30px rgba(78, 205, 196, 0.90));
-  }
-}
-
-.freeze-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg,
-      rgba(100, 200, 255, 0.3) 0%,
-      rgba(70, 130, 255, 0.5) 50%,
-      rgba(30, 80, 200, 0.4) 100%);
-  backdrop-filter: blur(5px);
-  z-index: 50;
-  pointer-events: none;
-  /* Пропускает клики сквозь overlay */
-  animation: freeze-pulse 2s ease-in-out;
-
-}
-
-@keyframes freeze-pulse {
-  0% {
-    opacity: 0;
-  }
-
-  20% {
-    opacity: 0.7;
-  }
-
-  50% {
-    opacity: 0.4;
-  }
-
-  80% {
-    opacity: 0.6;
-  }
-
-  100% {
-    opacity: 0;
-  }
-}
-
-
+/* ЭЛЕМЕНТЫ ПРИ ЗАМОРОЗКЕ */
 .game-element.frozen {
   animation-play-state: paused !important;
   filter:
     drop-shadow(0px 0px 15px rgba(100, 200, 255, 0.8)) hue-rotate(180deg) brightness(1.2);
-  transform: scale(1.1);
-  transition: all 0.5s ease;
 }
-
-.freeze-notification {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  font-size: 48px;
-  font-weight: bold;
-  text-shadow: 0 0 20px rgba(100, 200, 255, 0.8);
-  z-index: 60;
-  animation: freeze-text 2s ease-in-out;
-  pointer-events: none;
-}
-
-@keyframes freeze-text {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.5);
-  }
-
-  20% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.1);
-  }
-
-  40% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-
-  80% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.8);
-  }
-}
-
-@keyframes fall-slow {
-  to {
-    transform: translateY(100vh);
-  }
-}
-
-.game-element {
-  animation: fall-slow linear forwards;
-  animation-play-state: running;
-}
-
-game-element:active {
-  transform: scale(0.8) !important;
-  transition: transform 0.1s ease;
-}
-
-/* === ОБНОВЛЕННЫЕ СТИЛИ === */
 
 /* УВЕДОМЛЕНИЕ О ПАУЗЕ */
 .pause-notification {
@@ -243,28 +95,6 @@ game-element:active {
   to {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
-  }
-}
-
-/* ЭФФЕКТ ИСЧЕЗНОВЕНИЯ ЭЛЕМЕНТОВ */
-.element-destroyed {
-  animation: element-destroy 0.3s ease-out forwards !important;
-}
-
-@keyframes element-destroy {
-  0% {
-    opacity: 1;
-    transform: translateY(var(--current-y)) scale(1);
-  }
-
-  50% {
-    opacity: 0.5;
-    transform: translateY(var(--current-y)) scale(1.2);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateY(var(--current-y)) scale(0.5);
   }
 }
 
@@ -307,23 +137,53 @@ game-element:active {
   }
 }
 
-/* ЭЛЕМЕНТЫ ПРИ ЗАМОРОЗКЕ */
-.game-element.frozen {
-  animation-play-state: paused !important;
-  filter:
-    drop-shadow(0px 0px 15px rgba(100, 200, 255, 0.8)) hue-rotate(180deg) brightness(1.2);
-  transform: scale(1.1);
-  transition: all 0.5s ease;
+.score {
+  position: fixed;
+  top: 40px;
+  right: 20px;
+  min-width: 150px;
+  height: 60px;
+  padding: 0 25px;
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(10px);
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  box-shadow: 0px 8px 32px 0px rgba(0, 0, 0, 0.30);
+  color: #FFFFFF;
+  font-size: 24px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
 }
 
-/* ЗАМЕДЛЕННАЯ АНИМАЦИЯ ПАДЕНИЯ */
-@keyframes fall-slow {
-  to {
-    transform: translateY(100vh);
-  }
+.pause-btn {
+  position: fixed;
+  top: 40px;
+  left: 20px;
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  box-shadow: 0px 8px 32px 0px rgba(0, 0, 0, 0.30);
+  color: #FFFFFF;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.game-element {
-  animation: fall-slow linear forwards;
-  animation-play-state: running;
+.game-container {
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
 }

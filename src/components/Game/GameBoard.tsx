@@ -8,6 +8,7 @@ type GameElementType = {
   x: number;
   speed: number;
   type: 'heart' | 'bomb' | 'freeze';
+  createdAt: number; // Добавляем время создания
 };
 
 const GameBoard: React.FC = () => {
@@ -21,7 +22,8 @@ const GameBoard: React.FC = () => {
       id: Date.now() + Math.random(),
       x: Math.random() * 90,
       speed: Math.random() * 2 + 2,
-      type
+      type,
+      createdAt: Date.now() // Запоминаем время создания
     };
   }, []);
 
@@ -49,7 +51,6 @@ const GameBoard: React.FC = () => {
     const newPausedState = !isPaused;
     setIsPaused(newPausedState);
 
-    // Если включаем паузу - очищаем экран
     if (newPausedState) {
       setElements([]);
     }
@@ -78,40 +79,14 @@ const GameBoard: React.FC = () => {
     };
   }, [isPaused, createElement]);
 
-  // АВТОМАТИЧЕСКОЕ УДАЛЕНИЕ ПРИ ДОСТИЖЕНИИ НИЖНЕЙ ГРАНИЦЫ
-  useEffect(() => {
-    const checkElementsPosition = () => {
-      setElements(prev => prev.filter(el => {
-        const element = document.getElementById(`element-${el.id}`);
-        if (!element) return false;
-
-        const rect = element.getBoundingClientRect();
-        // Удаляем если элемент достиг нижней границы экрана
-        return rect.top < window.innerHeight;
-      }));
-    };
-
-    const positionCheckInterval = setInterval(checkElementsPosition, 100); // Проверяем чаще
-
-    // Также проверяем позицию при скролле/изменении размера
-    window.addEventListener('resize', checkElementsPosition);
-
-    return () => {
-      clearInterval(positionCheckInterval);
-      window.removeEventListener('resize', checkElementsPosition);
-    };
-  }, []);
-
-  // УДАЛЕНИЕ ЭЛЕМЕНТОВ ПРИ ВЫХОДЕ ЗА ПРЕДЕЛЫ ЭКРАНА (страховка)
+  // ПРОСТАЯ И НАДЕЖНАЯ ЛОГИКА УДАЛЕНИЯ ПО ВРЕМЕНИ
   useEffect(() => {
     const cleanupInterval = setInterval(() => {
+      const now = Date.now();
       setElements(prev => prev.filter(el => {
-        const element = document.getElementById(`element-${el.id}`);
-        if (!element) return false;
-
-        const rect = element.getBoundingClientRect();
-        // Удаляем если элемент полностью ушел за нижнюю границу
-        return rect.top < window.innerHeight + 100;
+        // Удаляем элементы, которые существуют дольше 8 секунд
+        // (максимальное время падения + запас)
+        return now - el.createdAt < 8000;
       }));
     }, 1000);
 
@@ -120,17 +95,14 @@ const GameBoard: React.FC = () => {
 
   return (
     <div className="game-container">
-      {/* СИНИЙ ЭКРАН ЗАМОРОЗКИ */}
       {isFrozen && <div className="freeze-overlay"></div>}
 
-      {/* Панель управления */}
       <div className="score">Score: {score}</div>
       <PauseButton
         isPaused={isPaused}
         onClick={handlePauseClick}
       />
 
-      {/* Сообщение о паузе */}
       {isPaused && (
         <div className="pause-notification">
           ⏸️ PAUSED
@@ -138,7 +110,6 @@ const GameBoard: React.FC = () => {
         </div>
       )}
 
-      {/* Рендер элементов */}
       {elements.map(el => (
         <GameElement
           key={el.id}
