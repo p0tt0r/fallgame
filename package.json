@@ -2,7 +2,7 @@
   "name": "fallgame",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://yourusername.github.io/fallgame",
+  "homepage": "https://p0tt0r.github.io/fallgame",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",

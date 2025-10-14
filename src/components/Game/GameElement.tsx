@@ -18,7 +18,7 @@ const GameElement: React.FC<GameElementProps> = ({
   const [elementPosition, setElementPosition] = useState({ x: 0, y: 0 });
 
   const handleClick = () => {
-    if (isFrozen || isExploding) return;
+    if (isExploding) return;
 
     // Получаем позицию элемента для частиц
     const element = document.getElementById(`element-${id}`);

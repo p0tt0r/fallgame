@@ -1,0 +1,54 @@
+/* Десктопная версия */
+.game-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    background: linear-gradient(180deg, rgba(26, 26, 46, 0.9) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+}
+
+.pause-btn {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+}
+
+.current-score {
+    font-size: 18px;
+    padding: 10px 20px;
+}
+
+.username {
+    font-size: 14px;
+    padding: 6px 12px;
+}
+
+.user-stats span {
+    font-size: 11px;
+    padding: 4px 10px;
+}
+
+.icon-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+}
+
+.game-element {
+    width: 60px;
+    height: 60px;
+    font-size: 40px;
+}
