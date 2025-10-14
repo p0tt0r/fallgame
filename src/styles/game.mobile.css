@@ -1,27 +1,30 @@
-/* game.mobile.css */
+/* game.mobile.css - обновленная версия */
 /* Мобильная версия */
 @media (max-width: 768px) {
     .game-header {
         padding: 8px 10px;
         flex-wrap: wrap;
         gap: 8px;
+        align-items: flex-start;
+        /* Выравниваем по верху */
     }
 
     .header-left {
         order: 1;
-        flex: 1 1 100%;
-        justify-content: space-between;
-        margin-bottom: 5px;
+        flex: 1;
+        justify-content: flex-start;
+        margin-bottom: 0;
     }
 
     .header-center {
-        order: 2;
-        flex: 1;
-        min-width: 120px;
+        order: 3;
+        flex: 1 1 100%;
+        align-items: flex-end;
+        margin-top: 5px;
     }
 
     .header-right {
-        order: 3;
+        order: 2;
         flex: 1;
         justify-content: flex-end;
     }
@@ -30,12 +33,15 @@
         width: 45px;
         height: 45px;
         font-size: 18px;
+        margin-right: 10px;
     }
 
     .current-score {
-        font-size: 14px;
-        padding: 6px 12px;
-        min-width: 100px;
+        font-size: 16px;
+        padding: 8px 16px;
+        min-width: 120px;
+        margin-left: auto;
+        /* Сдвигаем вправо */
     }
 
     .username {
@@ -61,6 +67,7 @@
     .new-record {
         font-size: 9px;
         padding: 2px 6px;
+        margin-top: 3px;
     }
 
     /* Уменьшаем игровые элементы */
@@ -70,48 +77,6 @@
         font-size: 30px;
         min-width: 50px;
         min-height: 50px;
-    }
-
-    /* Уменьшаем уведомление о паузе */
-    .pause-notification {
-        font-size: 32px;
-        padding: 20px 30px;
-    }
-
-    .pause-hint {
-        font-size: 12px;
-    }
-
-    /* Уменьшаем модальное окно */
-    .modal-content {
-        width: 95%;
-        margin: 10px;
-    }
-
-    .modal-header {
-        padding: 15px 20px;
-    }
-
-    .modal-header h2 {
-        font-size: 1.2em;
-    }
-
-    .leaderboard-item {
-        padding: 10px;
-        margin-bottom: 8px;
-    }
-
-    .rank {
-        font-size: 1em;
-        min-width: 40px;
-    }
-
-    .player-name {
-        font-size: 0.9em;
-    }
-
-    .player-score {
-        font-size: 1em;
     }
 }
 
@@ -139,87 +104,46 @@
     }
 
     .current-score {
-        font-size: 12px;
-        padding: 4px 8px;
-    }
-
-    /* Еще больше уменьшаем элементы на очень маленьких экранах */
-    .game-element {
-        width: 45px;
-        height: 45px;
-        font-size: 25px;
-        min-width: 45px;
-        min-height: 45px;
+        font-size: 14px;
+        padding: 6px 12px;
+        min-width: 100px;
     }
 
     .pause-btn {
         width: 40px;
         height: 40px;
         font-size: 16px;
-    }
-
-    .icon-btn {
-        width: 28px;
-        height: 28px;
-        font-size: 10px;
-    }
-
-    .username {
-        font-size: 10px;
-        padding: 3px 6px;
-    }
-
-    /* Уменьшаем информационное сообщение */
-    .local-info {
-        font-size: 10px;
-        padding: 6px 12px;
-        bottom: 10px;
+        margin-right: 8px;
     }
 }
 
-/* Горизонтальная ориентация на мобильных */
-@media (max-width: 768px) and (orientation: landscape) {
+/* Альтернативный вариант - если нужен более компактный header */
+@media (max-width: 380px) {
     .game-header {
-        padding: 5px 8px;
+        flex-direction: column;
+        gap: 5px;
     }
 
-    .game-element {
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
-        min-width: 40px;
-        min-height: 40px;
+    .header-left {
+        order: 1;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .header-right {
+        order: 2;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .header-center {
+        order: 3;
+        width: 100%;
+        align-items: center;
+        margin-top: 5px;
     }
 
     .current-score {
-        font-size: 12px;
-        padding: 4px 8px;
-    }
-
-    /* Уменьшаем высоту контейнера для landscape */
-    .game-container {
-        height: 100vh;
-        min-height: 400px;
-    }
-}
-
-/* Улучшаем touch-опыт на мобильных */
-@media (max-width: 768px) {
-    .game-element {
-        /* Увеличиваем область касания */
-        margin: 2px;
-    }
-
-    .pause-btn,
-    .icon-btn {
-        /* Увеличиваем область касания для кнопок */
-        min-width: 44px;
-        min-height: 44px;
-    }
-
-    /* Улучшаем отзывчивость */
-    .game-element:active {
-        transform: scale(0.95);
-        transition: transform 0.1s;
+        margin-left: 0;
     }
 }
