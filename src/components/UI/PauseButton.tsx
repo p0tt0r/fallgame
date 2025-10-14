@@ -5,7 +5,7 @@ interface PauseButtonProps {
   onClick: () => void;
 }
 
-const PauseButton: React.FC<PauseButtonProps> = ({ isPaused, onClick }) => {
+const PauseButton: React.FC<PauseButtonProps> = ({ isPaused, onClick }: PauseButtonProps) => {
   return (
     <button className="pause-btn" onClick={onClick}>
       {isPaused ? '▶️' : '⏸️'}

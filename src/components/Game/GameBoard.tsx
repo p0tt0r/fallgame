@@ -4,22 +4,22 @@ import PauseButton from '../UI/PauseButton';
 import '../../styles/game.css';
 
 // Тип для падающих элементов
-type GameElementType = {
+type GameElement = {
   id: number;
-  x: number; 
-  speed: number; 
-  type: 'heart' | 'bomb' | 'freeze'; 
+  x: number;
+  speed: number;
+  type: 'heart' | 'bomb' | 'freeze';
 };
 
 const GameBoard: React.FC = () => {
   // Состояния игры
   const [score, setScore] = useState(0);
-  const [elements, setElements] = useState<GameElementType[]>([]);
+  const [elements, setElements] = useState<GameElement[]>([]);
   const [isPaused, setIsPaused] = useState(false);
   const [isFrozen, setIsFrozen] = useState(false);
 
   // Создание нового элемента
-  const createElement = useCallback((type: GameElementType['type']): GameElementType => {
+  const createElement = useCallback((type: GameElement['type']): GameElement => {
     return {
       id: Date.now() + Math.random(), // Уникальный ID
       x: Math.random() * 90, // Случайная позиция (0-90%)
@@ -29,12 +29,12 @@ const GameBoard: React.FC = () => {
   }, []);
 
   // Обработка клика по элементу
-  const handleElementClick = (id: number, type: GameElementType['type']) => {
+  const handleElementClick = (id: number, type: GameElement['type']) => {
     if (isPaused || isFrozen) return;
 
     setElements(prev => prev.filter(el => el.id !== id));
 
-    switch(type) {
+    switch (type) {
       case 'heart':
         setScore(s => s + 1);
         break;
@@ -56,11 +56,11 @@ const GameBoard: React.FC = () => {
       heart: setInterval(() => {
         setElements(prev => [...prev, createElement('heart')]);
       }, 800),
-      
+
       bomb: setInterval(() => {
         setElements(prev => [...prev, createElement('bomb')]);
       }, 3000),
-      
+
       freeze: setInterval(() => {
         setElements(prev => [...prev, createElement('freeze')]);
       }, 10000)
@@ -87,11 +87,11 @@ const GameBoard: React.FC = () => {
     <div className="game-container">
       {/* Панель управления */}
       <div className="score">Score: {score}</div>
-      <PauseButton 
-        isPaused={isPaused} 
-        onClick={() => setIsPaused(!isPaused)} 
+      <PauseButton
+        isPaused={isPaused}
+        onClick={() => setIsPaused(!isPaused)}
       />
-      
+
       {/* Рендер элементов */}
       {elements.map(el => (
         <GameElement
@@ -104,9 +104,6 @@ const GameBoard: React.FC = () => {
           isFrozen={isFrozen}
         />
       ))}
-      
-      {/* Эффект заморозки */}
-      {isFrozen && <div className="frozen-overlay"></div>}
     </div>
   );
 };
